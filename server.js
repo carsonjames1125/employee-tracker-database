@@ -1,16 +1,16 @@
 // variables
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 // need to use chalk to style 
-const chalk = require('chalk');
+const chalk = import('chalk');
 // need to use console.table to organize the data
 const consoleTable = require('console.table');
 // need a starting screen 
 const connection = require('./connection/connection');
 // need employee queries
 const startScr = ['View Employees', 'View Employees by Department', 'Employees by Manager', 'Add Employee', 'Remove Employee', 'Update Role for Employee', 'Roles', 'Add Role', 'Remove Role', 'View Departments', 'Add Department', 'Remove Department', 'Leave']
-// employee
+// // employee
 const allEmployee = `SELECT e.id, e.first_name AS "First Name", e.last_name as "Last Name", r.title, d.department_name AS "Department", IFNULL(r.salary, 'No Data') AS "Salary", CONCAT(m.first_name, " ", m.last_name) AS "Manager"
 FROM employees e 
 LEFT JOIN roles r 
@@ -35,9 +35,9 @@ const startApp = () => {
         name: 'menuChoice',
         type: 'list',
         message: 'Select an option',
-        choices: startScreen
+        choices: startScr
 
-    }),then((answer) => {
+    }).then((answer) => {
         switch (answer.menuChoice) {
             case 'View Employees':
             showAll();
