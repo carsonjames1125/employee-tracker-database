@@ -157,8 +157,51 @@ const emByManager = () => {
                 if (err) throw err;
                 console.log(' ');
                 console.table(chalk.green('Employees by Manager'), results);
+                startApp();
             })
         })
     })
 }
 
+const addEmployee = () => {
+    if (err) throw err;
+    inquirer.prompt([
+        {
+            name: 'firstName',
+            type: 'input',
+            message: addEmployeeQuest[0]
+        },
+        {
+            name: 'lastName',
+            type: 'input',
+            message: addEmployeeQuest[1]
+        },
+        {
+            name: 'role',
+            type: 'list',
+            choices: function () {
+                let choice = results[0].map(choice => choice.title);
+                return choice;
+            },
+            message: addEmployeeQuest[2]
+        },
+        {
+            name: 'manager',
+            type: 'list',
+            choices: function () {
+                let choice = results[1].map(choice => choice.full_name);
+                return choice;
+            },
+            message: addEmployeeQuest[3]
+            
+        }
+
+    ]).then((answer) => {
+        connection.query(
+            `INSERT INTO employees(first_name, last_name, role_id, manager_id VALUES(?, ?,
+            SELECT id FROM roles WHERE title = ? ),
+            SELECT id FROM (SELECT if FROM employees WHERE CONCAT(first_name," ", last_name) = ? ) AS tmptable))`, [answer.firstName, answer.lastName, answer.role, answer.manager]
+        )
+        startApp();
+    })
+}
