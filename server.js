@@ -351,3 +351,63 @@ const removeRole = () => {
 
 // view departments 
 
+const viewDept = () => {
+    query = `SELECT department_name AS "Departments" FROM departments`;
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+
+        console.log(' ');
+        console.table(chalk.green('All Departments'), results)
+        startApp();
+    })
+}
+
+// add department
+
+const addDept = () => {
+    query = `SELECT department_name AS "Departments" FROM departments`;
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+
+        console.log(' ');
+        console.table(chalk.green('Show current Departments'), results);
+        inquirer.prompt([
+            {
+                name: 'newDept',
+                type: 'inout',
+                message: 'What is the name of the new Department you wish to add:'
+            }
+        ]).then((answer) => {
+            connection.query(`INSERT INTO departments(department_name) VALUES( ? )`, answer.newDept)
+            startApp();
+        })
+    })
+}
+
+
+// remove department
+
+const removeDept = () => {
+    query = `SELECT * FROM departments`;
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name:'remDept',
+                type: 'list',
+                choices: function() {
+                    let choiceA = results.map(choice => choice.department_name);
+                    return choiceA;
+                },
+                message: 'Choose what Department you would like to remove from the current list:'
+            }
+        ]).then((answer) => {
+            connection.query(`DELETE FROM departments WHERE ? `, { department_name: answer.remDept })
+            startApp();
+        })
+    })
+}
+
+// init application
+
+startApp();
