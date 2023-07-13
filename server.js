@@ -82,6 +82,9 @@ const startApp = () => {
     })
 }
 
+
+// show all employees
+
 const showAll = () => {
     connection.query(allEmployee, (err, results) => {
         if (err) throw err;
@@ -92,6 +95,7 @@ const showAll = () => {
 
 }
 
+// sort employees by department
 
 const emByDepartment = () => {
     const departmentQ = 'SELECT * FROM departments';
@@ -103,8 +107,8 @@ const emByDepartment = () => {
                 name: 'pickDept',
                 type: 'list',
                 choices: function () {
-                    let choices = results.map(choice => choice.department_name)
-                    return choices;
+                    let choiceA = results.map(choice => choice.department_name)
+                    return choiceA;
                 },
                 message: 'Select a Department:'
             }
@@ -127,6 +131,7 @@ const emByDepartment = () => {
     })
 }
 
+// sort employees by manager 
 
 const emByManager = () => {
     connection.query(manager, (err, results) => {
@@ -137,8 +142,8 @@ const emByManager = () => {
                 name: 'man_choice',
                 type: 'list', 
                 choices: function () {
-                    let choice = results.map(choices => choice.full_name);
-                    return choice;
+                    let choiceA = results.map(choices => choice.full_name);
+                    return choiceA;
                 },
                 message: 'Select Manager:'
             }
@@ -163,6 +168,8 @@ const emByManager = () => {
     })
 }
 
+
+// add employee
 const addEmployee = () => {
     if (err) throw err;
     inquirer.prompt([
@@ -180,8 +187,8 @@ const addEmployee = () => {
             name: 'role',
             type: 'list',
             choices: function () {
-                let choice = results[0].map(choice => choice.title);
-                return choice;
+                let choiceA = results[0].map(choice => choice.title);
+                return choiceA;
             },
             message: addEmployeeQuest[2]
         },
@@ -189,8 +196,8 @@ const addEmployee = () => {
             name: 'manager',
             type: 'list',
             choices: function () {
-                let choice = results[1].map(choice => choice.full_name);
-                return choice;
+                let choiceA = results[1].map(choice => choice.full_name);
+                return choiceA;
             },
             message: addEmployeeQuest[3]
             
@@ -205,3 +212,142 @@ const addEmployee = () => {
         startApp();
     })
 }
+
+// remove employees
+
+const removeEmployee = () => {
+    connection.query(allEmployee, (err, results) => {
+        if (err) throw err;
+        console.log(' ');
+        console.table(chalk.green('All Employees'), results)
+        inquirer.prompt([
+            {
+                name: 'IDtoRemove',
+                type: 'input',
+                message: 'Enther the Employees Identification Number you would like to remove:'
+            }
+        ]).then((answer) => {
+            connection.query(`DELETE FROM employees where ?`, { id: answer.IDtoRemove })
+            startApp();
+        })
+    })
+}
+
+// update role for employee/employees
+
+const updateRole = () => {
+    const query = `SELECT CONCAT (first_name, " ", last_name) AS full_name FROM employees; SELECT title FROM roles`
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: 'employ',
+                type: 'list',
+                choices: function () {
+                    let choiceA = results[0].map(choice => choice.full_name);
+                    return choiceA;
+                },
+                message: 'Select an employee to update their role:'
+            },
+            {
+                name: 'newRole',
+                type: 'list',
+                choices: function() {
+                    let choiceA = results[1].map(choice => choice.title);
+                    return choiceA;
+                }
+            }
+        ]).then((answer) => {
+            connection.query(`UPDATE employees
+            SET role_id = (SELECT id FROM roles WHERE title = ? )
+            WHERE id = (SELECT if FROM(SELECT id FROM employees WHERE CONCAT(first_name," ",last_name) = ?) AS tmptable)`, [answer.newRole, answer.employ], (err, results) => {
+                if (err) throw err;
+                startApp();
+            })
+        })
+    })
+}
+
+// view current roles
+
+const viewRoles = () => {
+    let query = `SELECT title AS "Title" FROM roles`;
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+
+        console.log(' ');
+        console.table(chalk.green('All Roles'), results);
+        startApp();
+    })
+}
+
+// add role
+
+const addRole = () => {
+    const addRoleQ = `SELECT * FROM roles; SELECT * FROM departments`
+    connection.query(addRoleQ, (err, results) => {
+        if (err) throw err;
+
+        console.log(' ');
+        console.table(chalk.green('List Current Roles:'), results[0]);
+
+        inquirer.prompt([
+            {
+                name: 'newTitle',
+                type: 'input',
+                message: 'Please enter a new Role:',
+            },
+            {
+                name: 'newSalary',
+                type: 'input',
+                message: 'Enter pay for new role:'
+            },
+            {
+                name: 'depart',
+                type: 'list',
+                choices: function() {
+                    let choiceA = results[1].map(choice => choice.department_name);
+                    return choiceA;
+                },
+                message: 'Select the Department for which the new Role belongs:'
+            }
+        ]).then((answer) => {
+            connection.query(
+                `INSERT INTO roles(title, salary, department_id)
+                VALUES
+                ("${answer.newTitle}", "${answer.newSalary}",
+                (SELECT id FROM departments WHERE deapartment_name = "${answer.depart}"));`
+            )
+            startApp();
+        })
+    })
+}
+
+// remove role
+
+const removeRole = () => {
+    query = `SELECT * FROM roles`;
+    connection.query(query, (err, results) => {
+        if (err) throw err;
+
+
+        inquirer.prompt([
+            {
+                name: 'removeRole',
+                type: 'list',
+                choices: function() {
+                    let choiceA = results.map(choice => choice.title);
+                    return choiceA;
+                },
+                message: 'Select the Role you wish to remove:'
+            }.then((answer) => {
+                connection.query(`DELETE FROM roles WHERE ? `, { title: answer.removeRole });
+                startApp();
+            })
+        ])
+    })
+}
+
+
+// view departments 
+
