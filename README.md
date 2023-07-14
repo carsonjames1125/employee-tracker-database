@@ -25,6 +25,7 @@ https://github.com/doowb/ansi-colors
 https://stackoverflow.com/questions/47548434/cant-add-new-command-when-connection-is-in-closed-state
 https://dev.to/upsier/node-js-error-connect-econnrefused-how-to-connect-with-phpmyadmin-2ekb
 https://www.hostinger.com/tutorials/what-is-mysql
+https://www.npmjs.com/package/mysql2
 https://stackoverflow.com/questions/17975120/access-denied-for-user-rootlocalhost-using-password-yes-no-privileges
 https://dev.mysql.com/doc/mysql-tutorial-excerpt/8.0/en/loading-tables.html
 https://www.sqlservertutorial.net/sql-server-basics/sql-server-create-table/
