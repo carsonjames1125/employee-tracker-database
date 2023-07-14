@@ -10,7 +10,12 @@ To install the program you need to use npm i inquirer@8.2.4 to begin. You also n
 
 ## Usage
 
-![alt text](assets/images/screenshot.png)
+GitHub Link: https://github.com/carsonjames1125/employee-tracker-database
+Submission Link: https://drive.google.com/file/d/1Y2FKQtB-ThKO1bUSuIpbSLryHQyDXZa2/view
+
+![alt text](./images/Screenshot%202023-07-13%20at%209.18.23%E2%80%AFPM.png)
+![alt text](./images/Screenshot%202023-07-13%20at%209.18.35%E2%80%AFPM.png)
+![alt text](./images/Untitled_%20Jul%2013%2C%202023%209_24%20PM.webm)
 
 ## Credits
 
@@ -47,8 +52,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
 
 
 ## Badges
