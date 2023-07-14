@@ -1,9 +1,11 @@
 // variables
 
 const mysql = require('mysql2');
+
+
 const inquirer = require('inquirer');
-// need to use chalk to style 
-const chalk = import('chalk');
+// need to use ansi-colors to style 
+const colors = require('ansi-colors');
 // need to use console.table to organize the data
 const consoleTable = require('console.table');
 // need a starting screen 
@@ -89,7 +91,7 @@ const showAll = () => {
     connection.query(allEmployee, (err, results) => {
         if (err) throw err;
         console.log(' ');
-        console.table(chalk.green('All Employees'), results)
+        console.table(colors.green('All Employees'), results)
         startApp();
     })
 
@@ -124,7 +126,7 @@ const emByDepartment = () => {
             connection.query(query, { department_name: pickedDept.department_name }, (err, res) => {
                 if (err) throw err;
                 console.log(' ');
-                console.table(chalk.green(`Employees by Department: $(pickedDept.department_name)`), res)
+                console.table(colors.green(`Employees by Department: $(pickedDept.department_name)`), res)
                 startApp();
             })
         })
@@ -161,7 +163,7 @@ const emByManager = () => {
             connection.query(manQ2, [answer.man_choice], (err, results) => {
                 if (err) throw err;
                 console.log(' ');
-                console.table(chalk.green('Employees by Manager'), results);
+                console.table(colors.green('Employees by Manager'), results);
                 startApp();
             })
         })
@@ -219,7 +221,7 @@ const removeEmployee = () => {
     connection.query(allEmployee, (err, results) => {
         if (err) throw err;
         console.log(' ');
-        console.table(chalk.green('All Employees'), results)
+        console.table(colors.green('All Employees'), results)
         inquirer.prompt([
             {
                 name: 'IDtoRemove',
@@ -276,7 +278,7 @@ const viewRoles = () => {
         if (err) throw err;
 
         console.log(' ');
-        console.table(chalk.green('All Roles'), results);
+        console.table(colors.green('All Roles'), results);
         startApp();
     })
 }
@@ -289,7 +291,7 @@ const addRole = () => {
         if (err) throw err;
 
         console.log(' ');
-        console.table(chalk.green('List Current Roles:'), results[0]);
+        console.table(colors.green('List Current Roles:'), results[0]);
 
         inquirer.prompt([
             {
@@ -357,7 +359,7 @@ const viewDept = () => {
         if (err) throw err;
 
         console.log(' ');
-        console.table(chalk.green('All Departments'), results)
+        console.table(colors.green('All Departments'), results)
         startApp();
     })
 }
@@ -370,7 +372,7 @@ const addDept = () => {
         if (err) throw err;
 
         console.log(' ');
-        console.table(chalk.green('Show current Departments'), results);
+        console.table(colors.green('Show current Departments'), results);
         inquirer.prompt([
             {
                 name: 'newDept',
